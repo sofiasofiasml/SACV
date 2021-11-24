@@ -11,3 +11,8 @@
 - [x] En el segundo ejericio ha sido solapar un histograma ne el video
 - [x] En el tercer ejericio he cambiado de reolsución de vídeo
 - [x] En el cuarto ejericio he cogido el audio del vídeo y lo he pasado a mono con el codec flac
+- ### Seminario 2
+- [x] Hemos hecho un video para detectar los vectores de movimiento
+- [x] Hemos estraido el audio del video, hemos cogido ese audio y lo hemos pasado a MP3 y a AAC y posteriormente hemos creado el container
+- [x] Hemos detectado el codec de todos los trackers del container y si buscamos un tracker que no tiene nada hemos puesto un print con el error y si lo detecta muestra que codec tiene
+- [x] Hemos creado un container con el video y los subtitulos, hemos extraido los subtitulos y hemos añadido los usbtitulos enganchados en el video.  
