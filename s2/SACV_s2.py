@@ -47,20 +47,26 @@ class Exercice():
                     "ffprobe -v error -select_streams v -show_entries stream=index -of csv=p=0 messiContainer.mp4"),
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT);
-                print('Codec Audio')
+                print('Audio codec')
                 for i in range(len(numAudio.stdout.decode('utf-8').splitlines())):
                     p = subprocess.run(shlex.split(
                         "ffprobe -v error -select_streams a:"+ str(i)+ " -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 messiContainer.mp4"),
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
                     printCodec(p)
-                print('Codec Video y equivocación')
+                print('Video codec and error')
                 for j in range(len(numVideo.stdout.decode('utf-8').splitlines())+1):
                     p = subprocess.run(shlex.split(
                         "ffprobe -v error -select_streams v:"+ str(j) +" -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 messiContainer.mp4"),
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
                     printCodec(p)
             if task == '4':
-                print('HOLA')
+                subprocess.call(
+                    ["ffmpeg", "-i", "messi1min.mp4", "-i", "subtitles.srt",
+                     "-map", "0", "-map", "1:s", "-c", "copy","-c:s","mov_text", "messiSub.mp4"]);
+                subprocess.call(
+                    ["ffmpeg", "-i", "messiSub.mp4", "-map", "0:2", "out.srt"]);
+                subprocess.call(
+                    ["ffmpeg", "-i", "messi1min.mp4", "-vf", "subtitles=subtitles.srt", "messiSubclose.mp4"]);
             if (task != '1' and task != '2' and task != '3' and task != '4'):
                 print('error nº exercicis: 1,2,3 i 4')
 
