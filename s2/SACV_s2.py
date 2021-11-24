@@ -1,4 +1,11 @@
 import subprocess
+import shlex
+
+def printCodec(p):
+    if (p.stdout.decode('utf-8') == ''):
+        print('ERROR')
+    else:
+        print(p.stdout.decode('utf-8'))
 
 class Exercice():
     def run(self):
@@ -20,20 +27,38 @@ class Exercice():
                      "copy", "-an" , "messiNoAudio.mp4",]);
                 #MP3
                 subprocess.call(
-                    ["ffmpeg", "-i", "messi1min.mp4", "mp3", "messi1min.mp3", ]);
+                    ["ffmpeg", "-i", "messi1min.mp4", "-f", "mp3", "messi1min.mp3"]);
                 #AAC
                 subprocess.call(
                     ["ffmpeg", "-i", "messi1min.mp4", "-c", "copy", "-map",
                      "0:a:0", "messiACC.aac", ]);
                 #Merging
                 subprocess.call(
-                    ["ffmpeg", "-i", "messi1min.mp4", "-i", "messi1min.mp3", "-c:v",
-                     "copy", "-c:a", "aac", "MarginMP3.mp4"]);
-                subprocess.call(
-                    ["ffmpeg", "-i", "messi1min.mp4", "-i", "messiACC.aac", "-c:v",
-                     "copy", "-c:a", "aac", "messiACC.mp4"]);
+                    ["ffmpeg", "-i", "messi1min.mp4", "-i", "messi1min.mp3",
+                     "-i", "messiACC.aac",
+                     "-map", "0:v", "-map", "1:a", "-c", "copy", "-map",
+                     "2:a", "-c", "copy", "messiContainer.mp4"]);
             if task == '3':
-                print('HOLA')
+                numAudio = subprocess.run(shlex.split(
+                    "ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 messiContainer.mp4"),
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT);
+                numVideo = subprocess.run(shlex.split(
+                    "ffprobe -v error -select_streams v -show_entries stream=index -of csv=p=0 messiContainer.mp4"),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT);
+                print('Codec Audio')
+                for i in range(len(numAudio.stdout.decode('utf-8').splitlines())):
+                    p = subprocess.run(shlex.split(
+                        "ffprobe -v error -select_streams a:"+ str(i)+ " -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 messiContainer.mp4"),
+                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
+                    printCodec(p)
+                print('Codec Video y equivocación')
+                for j in range(len(numVideo.stdout.decode('utf-8').splitlines())+1):
+                    p = subprocess.run(shlex.split(
+                        "ffprobe -v error -select_streams v:"+ str(j) +" -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 messiContainer.mp4"),
+                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
+                    printCodec(p)
             if task == '4':
                 print('HOLA')
             if (task != '1' and task != '2' and task != '3' and task != '4'):
