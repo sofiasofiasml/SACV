@@ -1,5 +1,7 @@
 import subprocess
 import shlex
+import requests
+from mega import Mega
 
 def printCodec(p):
     if (p.stdout.decode('utf-8') == ''):
@@ -60,6 +62,13 @@ class Exercice():
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT);
                     printCodec(p)
             if task == '4':
+                subprocess.call(
+                    ["pip", "install", "mega.py"]);
+                mega = Mega()
+                # login using a temporary anonymous account
+                m = mega.login()
+                url = 'https://mega.nz/file/2EEHhIQL#yU-OII9cB03rnOS3scnBYEA-qDhGUkD-eFwINywOORM'
+                m.download_url(url)
                 subprocess.call(
                     ["ffmpeg", "-i", "messi1min.mp4", "-i", "subtitles.srt",
                      "-map", "0", "-map", "1:s", "-c", "copy","-c:s","mov_text", "messiSub.mp4"]);
