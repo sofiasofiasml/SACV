@@ -1,4 +1,5 @@
 import subprocess
+import os
 class Ex1:
     def __init__(self, video, ChoseeVideo):
         while (
@@ -50,8 +51,9 @@ if __name__ == '__main__':
             Ex1(video, ChoseeVideo)
         if task == '2':
             #https://superuser.com/questions/153160/join-videos-with-split-screen
-            subprocess.call(["ffmpeg", "-i", "vp8.webm", "-i", "vp9.webm", "-filter_complex", "[0:v]pad=iw*2:ih[int]; [int][1:v]overlay=W/2:0[vid]",
-                             "-map", "[vid]", "-c:v", "libx264", "-crf", "23" "DobleSreen.mp4",]);
+            os.system("ffmpeg -i vp8.webm -i vp9.webm -filter_complex \"[0:v]pad=iw*2:ih[int]; [int][1:v]overlay=W/2:0[vid]\" -map \"[vid]\" -c:v libx264 -crf 23 2videoScreen.mp4")
+            os.system("ffmpeg -i vp8.webm -i vp9.webm -filter_complex \"blend=all_mode=difference\" -c:v libx264 -crf 18 -c:a copy diffVideo.mp4")
+            #Las diferencias que he visto son relativamente pocas, solo que hay como unos pixeles blancos que se aprecian por el centro de la pantalla
         if task == '3':
             print('hola')
         if task == '4':
