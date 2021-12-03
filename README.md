@@ -16,3 +16,9 @@
 - [x] Hemos estraido el audio del video, hemos cogido ese audio y lo hemos pasado a MP3 y a AAC y posteriormente hemos creado el container
 - [x] Hemos detectado el codec de todos los trackers del container y si buscamos un tracker que no tiene nada hemos puesto un print con el error y si lo detecta muestra que codec tiene
 - [x] Hemos creado un container con el video y los subtitulos, hemos extraido los subtitulos y hemos añadido los usbtitulos enganchados en el video.  
+- ### Seminario 3
+- [x] He hecho elegir la resolución del vídeo y posteriormente ese vídeo se convierte a VP8, VP9, h265 y AV1
+- [x] Comparamos los videos VP8, VP9 y mostramos su diferencia
+- [x] Hacemos broadcast del video a una IP en concreto
+- [x] Le preguntamos la ip al usuario, si no la introduce bien, se asigna la propia del PC
+
