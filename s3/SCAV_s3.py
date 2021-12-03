@@ -1,5 +1,6 @@
 import subprocess
 import os
+import socket
 class Ex1:
     def __init__(self, video, ChoseeVideo):
         while (
@@ -46,17 +47,27 @@ if __name__ == '__main__':
     video = '1s.mp4'
     videoLessResol = '1sLess.mp4'
     while(task != '1' and task != '2'  and task != '3' and task != '4'):
-        task = input("Quin exercici vols: \n1- Convert them into VP8, VP9, h265 & AV1\n2- Comparision videos\n3- Broadcast it into an IP\n4-choose the IP to broadcast\n")
+        task = input("Quin exercici vols: \n1- Convert them into VP8, VP9, h265 & AV1\n2- Comparision videos\n3- Broadcast it into an IP\n4- Choose the IP to broadcast\n")
         if task == '1':
             Ex1(video, ChoseeVideo)
         if task == '2':
-            #https://superuser.com/questions/153160/join-videos-with-split-screen
-            os.system("ffmpeg -i vp8.webm -i vp9.webm -filter_complex \"[0:v]pad=iw*2:ih[int]; [int][1:v]overlay=W/2:0[vid]\" -map \"[vid]\" -c:v libx264 -crf 23 2videoScreen.mp4")
-            os.system("ffmpeg -i vp8.webm -i vp9.webm -filter_complex \"blend=all_mode=difference\" -c:v libx264 -crf 18 -c:a copy diffVideo.mp4")
+            os.system("ffmpeg -i vp8.webm -i vp9.webm -filter_complex \"blend=all_mode=difference[blend];[0:v]pad=2*iw:2*ih[left];[left][1:v]overlay=w[tmp];[tmp][blend]overlay=0:h\" -c:v libx264 -crf 18 -c:a copy diffVideo.mp4")
             #Las diferencias que he visto son relativamente pocas, solo que hay como unos pixeles blancos que se aprecian por el centro de la pantalla
         if task == '3':
-            print('hola')
+            os.system(
+                "ffmpeg -re -i 1s.mp4 -vcodec copy -acodec copy -f mpegts udp://@172.26.16.1:2222" )
         if task == '4':
-            subprocess.call(["ffmpeg", "-i", "output.mp4", "-ac", "1", "Mono.flac",]);
+            IP = input("Quina es la teva IP?\n")
+            hostname = socket.gethostname()
+            local_ip = socket.gethostbyname(hostname)
+            if (IP == '' or len(IP)!=13):
+                os.system(
+                    "ffmpeg -re -i 1s.mp4 -vcodec copy -acodec copy -f mpegts udp://@"+local_ip+":2222")
+                print(local_ip)
+            else:
+                os.system(
+                    "ffmpeg -re -i 1s.mp4 -vcodec copy -acodec copy -f mpegts udp://@" + IP+ ":2222")
+                print(IP)
+
         if (task != '1' and task != '2'  and task != '3' and task != '4'):
             print('error nº exercicis: 1,2,3 i 4')
